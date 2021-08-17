@@ -48,9 +48,7 @@ def get_stored_user(user_id):
         user_dict = json.load(users_file)
         return user_dict[user_id]
 
-user_info = get_stored_user("1")
-user = user_info['username']
-password = user_info['password']
+
 # CONNECTION AND TOKEN MANAGEMENT
 
 def store_access_token(user, token):
@@ -166,8 +164,13 @@ def get_hours(diary):
     print(f"{total_computed_hours}:{total_computed_min}")
     print(total_days * 8)
 
-token = connect(user, password)
-diary = get_diary(token)
-get_hours(diary)
-# print(diary)
+
+if __name__ == "__main__":
+    user_info = get_stored_user("1")
+    user = user_info['username']
+    password = user_info['password']
+    token = connect(user, password)
+    diary = get_diary(token)
+    get_hours(diary)
+    # print(diary)
 
