@@ -1,13 +1,14 @@
 import requests
 import os
+import sys
 import re
 from datetime import datetime
+import json
+
+
 token = ""
-user = ""
-password=""
-# user = ""
-# password=""
 store_doc_name = "data"
+users_doc_name = "user_info"
 # presence_url = "https://gtd.woffu.com/api/users/414571/diaries/presence?fromDate=2021-08-01&pageIndex=0&pageSize=31&toDate=2021-08-31"
 default_headers = {
         'Host': 'gtd.woffu.com',
@@ -42,8 +43,14 @@ def eval_response(resp):
 
     return eval(resp.text.replace("null", "None").replace("false", "False").replace("true", "True"))
 
+def get_stored_user(user_id):
+    with open(users_doc_name, "r") as users_file:
+        user_dict = json.load(users_file)
+        return user_dict[user_id]
 
-
+user_info = get_stored_user("1")
+user = user_info['username']
+password = user_info['password']
 # CONNECTION AND TOKEN MANAGEMENT
 
 def store_access_token(user, token):
@@ -111,8 +118,8 @@ def get_user_id(token):
 
 def get_diary(token):
     user_id = get_user_id(token)
-    init = datetime(2021, 5, 1)
-    end = datetime(2021, 8, 31)
+    init = datetime(2021, 8, 9)
+    end = datetime(2021, 8, 14)
     init_str = init.strftime("%Y-%m-%d")
     end_str = end.strftime("%Y-%m-%d")
     headers = get_auth_headers(token)
@@ -163,3 +170,4 @@ token = connect(user, password)
 diary = get_diary(token)
 get_hours(diary)
 # print(diary)
+
